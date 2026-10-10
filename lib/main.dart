@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:musuem_guide_app_ui/constants/string_const.dart';
+import 'package:musuem_guide_app_ui/core/app_colors.dart';
 import 'package:musuem_guide_app_ui/routing/router.dart';
 
 void main() {
@@ -9,13 +10,21 @@ void main() {
 class MyApp extends StatelessWidget {
   const MyApp({super.key});
 
-  // This widget is the root of your application.
   @override
   Widget build(BuildContext context) {
     return MaterialApp.router(
       title: StringConst.appTitle,
       theme: ThemeData(
-        brightness: .light
+        brightness: .light,
+        scaffoldBackgroundColor: AppColors.background,
+        fontFamily: 'Gilroy',
+        colorScheme: ColorScheme.light(
+          surface: AppColors.background,
+          primary: AppColors.textPrimary,
+          onPrimary: AppColors.white,
+          secondary: AppColors.surface,
+          onSurface: AppColors.textPrimary,
+        ),
       ),
       builder: (ctx, child) => child!,
       routerConfig: router,

@@ -1,0 +1,39 @@
+class NumberConstant {
+  static const horizontalPadding = 24.0;
+  static const screenTopPadding = 40.0;
+  static const cardRadius = 10.0;
+  static const listCardRadius = 17.0;
+  static const searchRadius = 10.0;
+  static const avatarRadius = 27.0;
+  static const backButtonRadius = 10.0;
+  static const fabRadius = 34.0;
+  static const hotspotRadius = 21.5;
+
+  static const avatarSize = 46.0;
+  static const menuIconSize = 24.0;
+  static const searchHeight = 47.0;
+  static const locationChipHeight = 44.0;
+  static const backButtonSize = 40.0;
+  static const listThumbnailSize = 66.0;
+  static const listArrowSize = 32.0;
+  static const nearbyCardWidth = 235.0;
+  static const nearbyCardHeight = 285.0;
+  static const nearbyCardGap = 20.0;
+  static const listCardHeight = 85.0;
+  static const fabSize = 69.0;
+  static const scannerIconSize = 26.0;
+  static const detailButtonHeight = 28.0;
+  static const glassCardBlur = 11.5;
+  static const backButtonBlur = 7.5;
+  static const audioButtonSize = 48.0;
+  static const scanningCardWidth = 301.0;
+  static const scanningCardHeight = 126.0;
+  static const scanningThumbWidth = 113.0;
+  static const scanningThumbHeight = 101.0;
+  static const detailSheetHeight = 202.0;
+  static const profileTop = 40.0;
+  static const headerGap = 20.0;
+  static const sectionGap = 17.0;
+  static const contentGap = 10.0;
+  static const listCardGap = 10.0;
+}
