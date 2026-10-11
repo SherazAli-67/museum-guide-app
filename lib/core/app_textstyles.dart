@@ -5,7 +5,7 @@ import 'package:musuem_guide_app_ui/core/app_colors.dart';
 class AppTextStyles {
   static const welcomeTitle = TextStyle(
     fontFamily: StringConst.appFontFamily,
-    fontWeight: FontWeight.w700,
+    fontWeight: FontWeight.w800,
     fontSize: 28,
     height: 1.3,
     letterSpacing: -0.28,

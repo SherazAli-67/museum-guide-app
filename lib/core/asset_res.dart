@@ -8,7 +8,7 @@ class AssetRes {
   static const dioskouralImg = '${_imagesPath}dioskoural_img.png';
   static const theWhiteLieImg = '${_imagesPath}the_white_lie_img.png';
   static const detailPageImg = '${_imagesPath}detail_screen_img.png';
-  static const profileAvatarImg = '${_imagesPath}profile_avatar_img.png';
+  static const profileAvatarImg = '${_imagesPath}profile_avatar_img.jpeg';
   static const scanningHallImg = '${_imagesPath}scanning_hall_img.png';
   static const hotspotOuterImg = '${_imagesPath}hotspot_outer_img.png';
   static const hotspotRingImg = '${_imagesPath}hotspot_ring_img.png';

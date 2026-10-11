@@ -37,9 +37,9 @@ class HomeScreen extends StatelessWidget {
                               crossAxisAlignment: .start,
                               children: [
                                 _buildHeader(),
-                                Text(StringConst.welcomeTitle, style: AppTextStyles.welcomeTitle.copyWith(fontWeight: .w800),),
+                                //welcomeTitle
                                 _buildSearchField(),
-                                Text(StringConst.nearBy, style: AppTextStyles.sectionTitle,),
+                                //nearBy, sectionTitle
                                 SizedBox(
                                   height: NumberConstant.nearbyCardHeight,
                                   child: ListView.separated(
@@ -49,7 +49,8 @@ class HomeScreen extends StatelessWidget {
                                     itemBuilder: (context, index) => _buildNearbyCard(context, provider.nearbyExhibits[index]),
                                   ),
                                 ),
-                                Text(StringConst.firstFloor, style: AppTextStyles.sectionTitle,),
+                                //firstFloor, sectionTitle
+
                               ],
                             ),
                           ),
@@ -72,11 +73,11 @@ class HomeScreen extends StatelessWidget {
                 ),
               ),
             ),
-            Positioned(
+            /*Positioned(
               right: NumberConstant.horizontalPadding,
               bottom: MediaQuery.paddingOf(context).bottom + 24,
               child: _buildScannerFab(context),
-            ),
+            ),*/
           ],
         ),
       ),
@@ -87,32 +88,29 @@ class HomeScreen extends StatelessWidget {
     return Row(
       spacing: NumberConstant.contentGap,
       children: [
-        SvgPicture.asset(AssetRes.icDrawer, colorFilter: .mode(AppColors.textPrimary, .srcIn),),
+        //icDrawer
         Expanded(
           child: Container(
             padding: .symmetric(horizontal: 15, vertical: 10),
             decoration: BoxDecoration(
-              color: AppColors.surface,
-              borderRadius: .circular(NumberConstant.cardRadius),
+              // color: AppColors.surface,
+              // borderRadius: .circular(NumberConstant.cardRadius),
             ),
             child: Row(
               spacing: 5,
               children: [
-                SvgPicture.asset(AssetRes.icLocationPin, colorFilter: .mode(AppColors.textPrimary, .srcIn),),
-                Expanded(child: Text(StringConst.locationDefault, style: AppTextStyles.locationLabel, maxLines: 1, overflow: .ellipsis,),),
-                SvgPicture.asset(AssetRes.icDropdown, colorFilter: .mode(AppColors.textPrimary, .srcIn),),
+                //icLocationPin
+                //locationDefault, locationLabel
+                Expanded(child: const SizedBox()),
+                //icDropdown
               ],
             ),
           ),
         ),
         ClipRRect(
           borderRadius: .circular(NumberConstant.avatarRadius),
-          child: Image.asset(
-            AssetRes.profileAvatarImg,
-            width: NumberConstant.avatarSize,
-            height: NumberConstant.avatarSize,
-            fit: .cover,
-          ),
+          //profileAvatarImg, avatarSize,
+          child:const SizedBox()
         ),
       ],
     );
@@ -124,8 +122,8 @@ class HomeScreen extends StatelessWidget {
         height: NumberConstant.searchHeight,
         padding: .symmetric(horizontal: 20),
         decoration: BoxDecoration(
-          color: AppColors.surface,
-          borderRadius: .circular(NumberConstant.searchRadius),
+          // color: AppColors.surface,
+          // borderRadius: .circular(NumberConstant.searchRadius),
         ),
         child: Row(
           spacing: NumberConstant.contentGap,
@@ -138,13 +136,13 @@ class HomeScreen extends StatelessWidget {
                 decoration: InputDecoration(
                   isDense: true,
                   border: .none,
-                  hintText: StringConst.searchHint,
+                  hintText: '',
                   hintStyle: AppTextStyles.searchHint,
                   contentPadding: .zero,
                 ),
               ),
             ),
-            SvgPicture.asset(AssetRes.icSearch, colorFilter: .mode(AppColors.textPrimary, .srcIn),),
+            //icSearch
           ],
         ),
       ),
@@ -164,14 +162,16 @@ class HomeScreen extends StatelessWidget {
           Positioned.fill(
             child: ClipRRect(
               borderRadius: .circular(20),
-              child: Image.asset(exhibit.imagePath, fit: .cover,),
+              //exhibit.imagePath, fit.cover
+              child: const SizedBox()
             ),
           ),
           Positioned(
             left: 8,
             right: 8,
             bottom: 8,
-            child: GlassCard(
+            //GlassCard
+            child: Padding(
               padding: .all(12),
               child: Column(
                 spacing: 8,
@@ -181,8 +181,10 @@ class HomeScreen extends StatelessWidget {
                   Row(
                     spacing: 8,
                     children: [
-                      Expanded(child: Text(exhibit.title, style: AppTextStyles.cardTitle, maxLines: 1, overflow: .ellipsis,),),
-                      Text(exhibit.yearLabel, style: AppTextStyles.cardMeta,),
+                      //exhibit.title, cardTitle,
+                      Expanded(child: const SizedBox()),
+                      //exhibit.yearLabel, cardMeta
+
                     ],
                   ),
                   Row(
@@ -192,8 +194,9 @@ class HomeScreen extends StatelessWidget {
                         child: Row(
                           spacing: 8,
                           children: [
-                            SvgPicture.asset(metaIcon, colorFilter: .mode(AppColors.textPrimary, .srcIn),),
-                            Flexible(child: Text(metaLabel, style: AppTextStyles.cardMeta, maxLines: 1, overflow: .ellipsis,),),
+                            //metaIcon,
+                            //metaLabel
+                            Flexible(child: const SizedBox()),
                           ],
                         ),
                       ),
@@ -202,10 +205,11 @@ class HomeScreen extends StatelessWidget {
                         child: Container(
                           padding: .symmetric(horizontal: 10, vertical: 5),
                           decoration: BoxDecoration(
-                            color: AppColors.white,
+                            // color: AppColors.white,
                             borderRadius: .circular(NumberConstant.cardRadius),
                           ),
-                          child: Text(StringConst.detail, style: AppTextStyles.detailButton,),
+                          //detail, detailButton
+                          child: const SizedBox()
                         ),
                       ),
                     ],

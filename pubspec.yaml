@@ -89,7 +89,7 @@ flutter:
           weight: 600
         - asset: assets/fonts/Gilroy-Bold.ttf
           weight: 700
-        - asset: assets/fonts/Gilroy-ExtraBold.ttf
+        - asset: assets/fonts/gilroy-extrabold.otf
           weight: 800
 
     - family: Lato

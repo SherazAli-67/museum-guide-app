@@ -21,10 +21,9 @@ class ExhibitListTile extends StatelessWidget {
     return GestureDetector(
       onTap: onTap,
       child: Container(
-        height: NumberConstant.listCardHeight,
         padding: .symmetric(horizontal: 9, vertical: 9),
         decoration: BoxDecoration(
-          borderRadius: .circular(NumberConstant.listCardRadius),
+        /*  borderRadius: .circular(NumberConstant.listCardRadius),
           gradient: LinearGradient(
             begin: const Alignment(-0.7, -0.5),
             end: const Alignment(0.9, 0.8),
@@ -33,19 +32,15 @@ class ExhibitListTile extends StatelessWidget {
               AppColors.white.withValues(alpha: 0),
             ],
             stops: const [0.41, 0.88],
-          ),
+          ),*/
         ),
         child: Row(
           spacing: 17,
           children: [
             ClipRRect(
               borderRadius: .circular(NumberConstant.cardRadius),
-              child: Image.asset(
-                exhibit.thumbnailPath,
-                width: NumberConstant.listThumbnailSize,
-                height: NumberConstant.listThumbnailSize,
-                fit: .cover,
-              ),
+              //exhibit.thumbnailPath, listThumbnailSize, fit.cover
+              child: const SizedBox()
             ),
             Expanded(
               child: Column(
@@ -53,16 +48,16 @@ class ExhibitListTile extends StatelessWidget {
                 crossAxisAlignment: .start,
                 mainAxisAlignment: .center,
                 children: [
-                  Text(exhibit.title, style: AppTextStyles.cardTitle, maxLines: 1, overflow: .ellipsis,),
-                  Text(exhibit.yearLabel, style: AppTextStyles.metaLabel,),
+                  //exhibit.title, cardTitle
+                  //exhibit.yearLabel, metaLabel
                 ],
               ),
             ),
-            AppIconButton.surface(
+           /* AppIconButton.surface(
               iconPath: AssetRes.icArrowNext,
               onTap: onTap,
               colorFilter: .mode(AppColors.textPrimary, .srcIn),
-            ),
+            ),*/
           ],
         ),
       ),
