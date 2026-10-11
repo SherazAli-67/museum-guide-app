@@ -51,6 +51,7 @@ class AppData {
     id: 'the-white-lie',
     title: 'The White Lie',
     yearLabel: '111-124 BC',
+    shortYearLabel: '110 BC',
     imagePath: AssetRes.theWhiteLieImg,
     thumbnailPath: AssetRes.theWhiteLieImg,
     floorLabel: StringConst.firstFloor,

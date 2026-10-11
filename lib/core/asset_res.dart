@@ -29,4 +29,5 @@ class AssetRes {
   static const icHeadphones = '${_iconsPath}ic_headphones.svg';
   static const icSwipeUp = '${_iconsPath}ic_swipe_up.svg';
   static const icRotate = '${_iconsPath}ic_rotate.svg';
+  static const hotspotDot = '${_iconsPath}hotspot.svg';
 }

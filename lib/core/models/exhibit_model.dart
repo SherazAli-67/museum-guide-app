@@ -2,6 +2,7 @@ class ExhibitModel {
   final String id;
   final String title;
   final String yearLabel;
+  final String? shortYearLabel;
   final String imagePath;
   final String thumbnailPath;
   final String? directionLabel;
@@ -13,6 +14,7 @@ class ExhibitModel {
     required this.id,
     required this.title,
     required this.yearLabel,
+    this.shortYearLabel,
     required this.imagePath,
     required this.thumbnailPath,
     this.directionLabel,
@@ -20,4 +22,6 @@ class ExhibitModel {
     required this.description,
     this.floorLabel,
   });
+
+  String get displayShortYear => shortYearLabel ?? yearLabel;
 }
