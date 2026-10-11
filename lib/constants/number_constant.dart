@@ -34,6 +34,6 @@ class NumberConstant {
   static const profileTop = 40.0;
   static const headerGap = 20.0;
   static const sectionGap = 17.0;
-  static const contentGap = 10.0;
+  static const contentGap = 20.0;
   static const listCardGap = 10.0;
 }

@@ -24,48 +24,48 @@ class HomeScreen extends StatelessWidget {
         body: Stack(
           children: [
             SafeArea(
-              child: Padding(
-                padding: .fromLTRB(NumberConstant.horizontalPadding, 16, NumberConstant.horizontalPadding, 0),
-                child: Column(
-                  spacing: NumberConstant.contentGap,
-                  crossAxisAlignment: .start,
-                  children: [
-                    _buildHeader(),
-                    Text(StringConst.welcomeTitle, style: AppTextStyles.welcomeTitle,),
-                    _buildSearchField(),
-                    Expanded(
-                      child: Consumer<HomeProvider>(
-                        builder: (context, provider, _) => Column(
-                          spacing: NumberConstant.contentGap,
-                          crossAxisAlignment: .start,
-                          children: [
-                            Text(StringConst.nearBy, style: AppTextStyles.sectionTitle,),
-                            SizedBox(
-                              height: NumberConstant.nearbyCardHeight,
-                              child: ListView.separated(
-                                scrollDirection: .horizontal,
-                                itemCount: provider.nearbyExhibits.length,
-                                separatorBuilder: (_, _) => const SizedBox(width: NumberConstant.nearbyCardGap),
-                                itemBuilder: (context, index) => _buildNearbyCard(context, provider.nearbyExhibits[index]),
-                              ),
+              child: Consumer<HomeProvider>(
+                builder: (context, provider, _) => CustomScrollView(
+                  slivers: [
+                    SliverPadding(
+                      padding: .fromLTRB(NumberConstant.horizontalPadding, 16, NumberConstant.horizontalPadding, 100),
+                      sliver: SliverMainAxisGroup(
+                        slivers: [
+                          SliverToBoxAdapter(
+                            child: Column(
+                              spacing: NumberConstant.contentGap,
+                              crossAxisAlignment: .start,
+                              children: [
+                                _buildHeader(),
+                                Text(StringConst.welcomeTitle, style: AppTextStyles.welcomeTitle.copyWith(fontWeight: .w800),),
+                                _buildSearchField(),
+                                Text(StringConst.nearBy, style: AppTextStyles.sectionTitle,),
+                                SizedBox(
+                                  height: NumberConstant.nearbyCardHeight,
+                                  child: ListView.separated(
+                                    scrollDirection: .horizontal,
+                                    itemCount: provider.nearbyExhibits.length,
+                                    separatorBuilder: (_, _) => const SizedBox(width: NumberConstant.nearbyCardGap),
+                                    itemBuilder: (context, index) => _buildNearbyCard(context, provider.nearbyExhibits[index]),
+                                  ),
+                                ),
+                                Text(StringConst.firstFloor, style: AppTextStyles.sectionTitle,),
+                              ],
                             ),
-                            Text(StringConst.firstFloor, style: AppTextStyles.sectionTitle,),
-                            Expanded(
-                              child: ListView.separated(
-                                padding: .only(bottom: 100),
-                                itemCount: provider.firstFloorExhibits.length,
-                                separatorBuilder: (_, _) => const SizedBox(height: NumberConstant.listCardGap),
-                                itemBuilder: (context, index) {
-                                  final exhibit = provider.firstFloorExhibits[index];
-                                  return ExhibitListTile(
-                                    exhibit: exhibit,
-                                    onTap: () => context.push(NamedRoutes.detailPath(exhibit.id)),
-                                  );
-                                },
-                              ),
-                            ),
-                          ],
-                        ),
+                          ),
+                          const SliverToBoxAdapter(child: SizedBox(height: NumberConstant.contentGap),),
+                          SliverList.separated(
+                            itemCount: provider.firstFloorExhibits.length,
+                            separatorBuilder: (_, _) => const SizedBox(height: NumberConstant.listCardGap),
+                            itemBuilder: (context, index) {
+                              final exhibit = provider.firstFloorExhibits[index];
+                              return ExhibitListTile(
+                                exhibit: exhibit,
+                                onTap: () => context.push(NamedRoutes.detailPath(exhibit.id)),
+                              );
+                            },
+                          ),
+                        ],
                       ),
                     ),
                   ],

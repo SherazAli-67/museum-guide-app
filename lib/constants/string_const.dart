@@ -1,5 +1,7 @@
 class StringConst {
   static const appTitle = 'Museum Guide';
+  static const appFontFamily = 'Gilroy';
+  static const appFontFamilyLato = 'Lato';
   static const welcomeTitle = 'Welcome To\nAR Museum Guide';
   static const searchHint = 'Search Sculpture...';
   static const nearBy = 'Near By';
