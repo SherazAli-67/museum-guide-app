@@ -20,27 +20,92 @@ class HomeScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     return ChangeNotifierProvider(
       create: (_) => HomeProvider(),
-      child: Scaffold(
-        body: Stack(
-          children: [
-            SafeArea(
-              child: Consumer<HomeProvider>(
-                builder: (context, provider, _) => CustomScrollView(
-                  slivers: [
-                    SliverPadding(
-                      padding: .fromLTRB(NumberConstant.horizontalPadding, 16, NumberConstant.horizontalPadding, 100),
-                      sliver: SliverMainAxisGroup(
-                        slivers: [
-                          SliverToBoxAdapter(
-                            child: Column(
-                              spacing: NumberConstant.contentGap,
-                              crossAxisAlignment: .start,
-                              children: [
-                                _buildHeader(),
-                                //welcomeTitle
-                                _buildSearchField(),
-                                //nearBy, sectionTitle
-                                SizedBox(
+      child: const _HomeView(),
+    );
+  }
+}
+
+class _HomeView extends StatefulWidget {
+  const _HomeView();
+
+  @override
+  State<_HomeView> createState() => _HomeViewState();
+}
+
+class _HomeViewState extends State<_HomeView> with TickerProviderStateMixin {
+  static const _entranceDuration = Duration(milliseconds: 900);
+  static const _fabPulseDuration = Duration(milliseconds: 1400);
+
+  late final AnimationController _entrance = AnimationController(vsync: this, duration: _entranceDuration);
+  late final AnimationController _fabPulse = AnimationController(vsync: this, duration: _fabPulseDuration);
+
+  @override
+  void initState() {
+    super.initState();
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      if (!mounted) return;
+      if (MediaQuery.disableAnimationsOf(context)) {
+        _entrance.value = 1;
+        return;
+      }
+      _entrance.forward();
+      _fabPulse.repeat(reverse: true);
+    });
+  }
+
+  @override
+  void dispose() {
+    _entrance.dispose();
+    _fabPulse.dispose();
+    super.dispose();
+  }
+
+  Animation<double> _section(double begin, double end) => CurvedAnimation(
+    parent: _entrance,
+    curve: Interval(begin, end, curve: Curves.easeOutCubic),
+  );
+
+  Widget _stagger({required Animation<double> animation, required Widget child}) {
+    return FadeTransition(
+      opacity: animation,
+      child: SlideTransition(
+        position: Tween<Offset>(begin: const Offset(0, 0.06), end: Offset.zero).animate(animation),
+        child: child,
+      ),
+    );
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      body: Stack(
+        children: [
+          SafeArea(
+            child: Consumer<HomeProvider>(
+              builder: (context, provider, _) => CustomScrollView(
+                slivers: [
+                  SliverPadding(
+                    padding: .fromLTRB(NumberConstant.horizontalPadding, 16, NumberConstant.horizontalPadding, 100),
+                    sliver: SliverMainAxisGroup(
+                      slivers: [
+                        SliverToBoxAdapter(
+                          child: Column(
+                            spacing: NumberConstant.contentGap,
+                            crossAxisAlignment: .start,
+                            children: [
+                              _stagger(animation: _section(0, 0.28), child: _buildHeader()),
+                              _stagger(
+                                animation: _section(0.08, 0.36),
+                                child: Text(StringConst.welcomeTitle, style: AppTextStyles.welcomeTitle,),
+                              ),
+                              _stagger(animation: _section(0.16, 0.44), child: _buildSearchField()),
+                              _stagger(
+                                animation: _section(0.24, 0.52),
+                                child: Text(StringConst.nearBy, style: AppTextStyles.sectionTitle,),
+                              ),
+                              _stagger(
+                                animation: _section(0.3, 0.62),
+                                child: SizedBox(
                                   height: NumberConstant.nearbyCardHeight,
                                   child: ListView.separated(
                                     scrollDirection: .horizontal,
@@ -49,37 +114,47 @@ class HomeScreen extends StatelessWidget {
                                     itemBuilder: (context, index) => _buildNearbyCard(context, provider.nearbyExhibits[index]),
                                   ),
                                 ),
-                                //firstFloor, sectionTitle
-
-                              ],
-                            ),
+                              ),
+                              _stagger(
+                                animation: _section(0.4, 0.7),
+                                child: Text(StringConst.firstFloor, style: AppTextStyles.sectionTitle,),
+                              ),
+                            ],
                           ),
-                          const SliverToBoxAdapter(child: SizedBox(height: NumberConstant.contentGap),),
-                          SliverList.separated(
-                            itemCount: provider.firstFloorExhibits.length,
-                            separatorBuilder: (_, _) => const SizedBox(height: NumberConstant.listCardGap),
-                            itemBuilder: (context, index) {
-                              final exhibit = provider.firstFloorExhibits[index];
-                              return ExhibitListTile(
+                        ),
+                        const SliverToBoxAdapter(child: SizedBox(height: NumberConstant.contentGap),),
+                        SliverList.separated(
+                          itemCount: provider.firstFloorExhibits.length,
+                          separatorBuilder: (_, _) => const SizedBox(height: NumberConstant.listCardGap),
+                          itemBuilder: (context, index) {
+                            final exhibit = provider.firstFloorExhibits[index];
+                            final begin = (0.45 + index * 0.06).clamp(0.0, 0.85);
+                            final end = (begin + 0.2).clamp(0.0, 1.0);
+                            return _stagger(
+                              animation: _section(begin, end),
+                              child: ExhibitListTile(
                                 exhibit: exhibit,
                                 onTap: () => context.push(NamedRoutes.detailPath(exhibit.id)),
-                              );
-                            },
-                          ),
-                        ],
-                      ),
+                              ),
+                            );
+                          },
+                        ),
+                      ],
                     ),
-                  ],
-                ),
+                  ),
+                ],
               ),
             ),
-            /*Positioned(
-              right: NumberConstant.horizontalPadding,
-              bottom: MediaQuery.paddingOf(context).bottom + 24,
+          ),
+          Positioned(
+            right: NumberConstant.horizontalPadding,
+            bottom: MediaQuery.paddingOf(context).bottom + 24,
+            child: _stagger(
+              animation: _section(0.55, 0.9),
               child: _buildScannerFab(context),
-            ),*/
-          ],
-        ),
+            ),
+          ),
+        ],
       ),
     );
   }
@@ -88,29 +163,27 @@ class HomeScreen extends StatelessWidget {
     return Row(
       spacing: NumberConstant.contentGap,
       children: [
-        //icDrawer
+        SvgPicture.asset(AssetRes.icDrawer),
         Expanded(
           child: Container(
             padding: .symmetric(horizontal: 15, vertical: 10),
             decoration: BoxDecoration(
-              // color: AppColors.surface,
-              // borderRadius: .circular(NumberConstant.cardRadius),
+              color: AppColors.surface,
+              borderRadius: .circular(NumberConstant.cardRadius),
             ),
             child: Row(
               spacing: 5,
               children: [
-                //icLocationPin
-                //locationDefault, locationLabel
-                Expanded(child: const SizedBox()),
-                //icDropdown
+                SvgPicture.asset(AssetRes.icLocationPin),
+                Expanded(child: Text(StringConst.locationDefault, style: AppTextStyles.locationLabel,)),
+                SvgPicture.asset(AssetRes.icDropdown)
               ],
             ),
           ),
         ),
         ClipRRect(
           borderRadius: .circular(NumberConstant.avatarRadius),
-          //profileAvatarImg, avatarSize,
-          child:const SizedBox()
+          child: Image.asset(AssetRes.profileAvatarImg, height: NumberConstant.avatarSize,)
         ),
       ],
     );
@@ -122,8 +195,8 @@ class HomeScreen extends StatelessWidget {
         height: NumberConstant.searchHeight,
         padding: .symmetric(horizontal: 20),
         decoration: BoxDecoration(
-          // color: AppColors.surface,
-          // borderRadius: .circular(NumberConstant.searchRadius),
+          color: AppColors.surface,
+          borderRadius: .circular(NumberConstant.searchRadius),
         ),
         child: Row(
           spacing: NumberConstant.contentGap,
@@ -136,13 +209,13 @@ class HomeScreen extends StatelessWidget {
                 decoration: InputDecoration(
                   isDense: true,
                   border: .none,
-                  hintText: '',
+                  hintText: StringConst.searchHint,
                   hintStyle: AppTextStyles.searchHint,
                   contentPadding: .zero,
                 ),
               ),
             ),
-            //icSearch
+            SvgPicture.asset(AssetRes.icSearch)
           ],
         ),
       ),
@@ -154,92 +227,129 @@ class HomeScreen extends StatelessWidget {
     final metaLabel = exhibit.stepsAway != null
         ? '${exhibit.stepsAway}${StringConst.stepsAwaySuffix}'
         : (exhibit.directionLabel ?? '');
-    return SizedBox(
-      width: NumberConstant.nearbyCardWidth,
-      height: NumberConstant.nearbyCardHeight,
-      child: Stack(
-        children: [
-          Positioned.fill(
-            child: ClipRRect(
-              borderRadius: .circular(20),
-              //exhibit.imagePath, fit.cover
-              child: const SizedBox()
-            ),
-          ),
-          Positioned(
-            left: 8,
-            right: 8,
-            bottom: 8,
-            //GlassCard
-            child: Padding(
-              padding: .all(12),
-              child: Column(
-                spacing: 8,
-                mainAxisSize: .min,
-                crossAxisAlignment: .start,
-                children: [
-                  Row(
-                    spacing: 8,
-                    children: [
-                      //exhibit.title, cardTitle,
-                      Expanded(child: const SizedBox()),
-                      //exhibit.yearLabel, cardMeta
-
-                    ],
-                  ),
-                  Row(
-                    spacing: 8,
-                    children: [
-                      Expanded(
-                        child: Row(
-                          spacing: 8,
-                          children: [
-                            //metaIcon,
-                            //metaLabel
-                            Flexible(child: const SizedBox()),
-                          ],
-                        ),
-                      ),
-                      GestureDetector(
-                        onTap: () => context.push(NamedRoutes.detailPath(exhibit.id)),
-                        child: Container(
-                          padding: .symmetric(horizontal: 10, vertical: 5),
-                          decoration: BoxDecoration(
-                            // color: AppColors.white,
-                            borderRadius: .circular(NumberConstant.cardRadius),
-                          ),
-                          //detail, detailButton
-                          child: const SizedBox()
-                        ),
-                      ),
-                    ],
-                  ),
-                ],
+    return _PressScale(
+      onTap: () => context.push(NamedRoutes.detailPath(exhibit.id)),
+      child: SizedBox(
+        width: NumberConstant.nearbyCardWidth,
+        height: NumberConstant.nearbyCardHeight,
+        child: Stack(
+          children: [
+            Positioned.fill(
+              child: ClipRRect(
+                borderRadius: .circular(20),
+                child: Image.asset(exhibit.imagePath, fit: .cover,)
               ),
             ),
-          ),
-        ],
+            Positioned(
+              left: 8,
+              right: 8,
+              bottom: 8,
+              child: GlassCard(
+                padding: .all(12),
+                child: Column(
+                  spacing: 8,
+                  mainAxisSize: .min,
+                  crossAxisAlignment: .start,
+                  children: [
+                    Row(
+                      spacing: 8,
+                      children: [
+                        Expanded(child: Text(exhibit.title, style: AppTextStyles.cardTitle,)),
+                        Text(exhibit.yearLabel, style: AppTextStyles.cardMeta,)
+                      ],
+                    ),
+                    Row(
+                      spacing: 8,
+                      children: [
+                        Expanded(
+                          child: Row(
+                            spacing: 8,
+                            children: [
+                              SvgPicture.asset(metaIcon),
+                              Flexible(child: Text(metaLabel,)),
+                            ],
+                          ),
+                        ),
+                        Container(
+                          padding: .symmetric(horizontal: 10, vertical: 5),
+                          decoration: BoxDecoration(
+                            color: AppColors.white,
+                            borderRadius: .circular(NumberConstant.cardRadius),
+                          ),
+                          child: Text(StringConst.detail, style: AppTextStyles.detailButton,)
+                        ),
+                      ],
+                    ),
+                  ],
+                ),
+              ),
+            ),
+          ],
+        ),
       ),
     );
   }
 
   Widget _buildScannerFab(BuildContext context) {
+    final reduceMotion = MediaQuery.disableAnimationsOf(context);
     return GestureDetector(
       onTap: () => context.push(NamedRoutes.scanning.routeName),
-      child: Container(
-        padding: .all(21.5),
-        decoration: BoxDecoration(
-          color: AppColors.scannerDark,
-          shape: .circle,
-          boxShadow: [
-            BoxShadow(
-              color: AppColors.scannerShadow,
-              blurRadius: 10,
-              offset: const Offset(0, 2),
+      child: AnimatedBuilder(
+        animation: _fabPulse,
+        builder: (context, child) {
+          final t = reduceMotion ? 0.0 : Curves.easeInOut.transform(_fabPulse.value);
+          final scale = 1 + 0.04 * t;
+          final blur = 10 + 8 * t;
+          return Transform.scale(
+            scale: scale,
+            child: Container(
+              padding: .all(21.5),
+              decoration: BoxDecoration(
+                color: AppColors.scannerDark,
+                shape: .circle,
+                boxShadow: [
+                  BoxShadow(
+                    color: AppColors.scannerShadow,
+                    blurRadius: blur,
+                    offset: const Offset(0, 2),
+                  ),
+                ],
+              ),
+              child: child,
             ),
-          ],
-        ),
+          );
+        },
         child: SvgPicture.asset(AssetRes.icScanner,),
+      ),
+    );
+  }
+}
+
+class _PressScale extends StatefulWidget {
+  final Widget child;
+  final VoidCallback? onTap;
+
+  const _PressScale({required this.child, this.onTap});
+
+  @override
+  State<_PressScale> createState() => _PressScaleState();
+}
+
+class _PressScaleState extends State<_PressScale> {
+  bool _pressed = false;
+
+  @override
+  Widget build(BuildContext context) {
+    return GestureDetector(
+      onTapDown: (_) => setState(() => _pressed = true),
+      onTapUp: (_) => setState(() => _pressed = false),
+      onTapCancel: () => setState(() => _pressed = false),
+      onTap: widget.onTap,
+      child: AnimatedScale(
+        scale: _pressed ? 0.97 : 1,
+        duration: const Duration(milliseconds: 120),
+        curve: Curves.easeOut,
+        child: widget.child,
       ),
     );
   }
